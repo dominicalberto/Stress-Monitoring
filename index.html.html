@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f2f2f7">
+<title>Stress Monitor Lab · Diana Graceshel I. Paltad</title>
+<style>
+:root{--bg:#f2f2f7;--cd:#fff;--tx:#1d1d1f;--mu:#6e6e73;--ln:#e5e5ea;--fl:#f2f2f7;--bl:#007aff;--or:#ff9500;--gn:#34c759;--rd:#ff3b30;--sh:0 1px 2px #0000000a,0 6px 20px #0000000d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden;background:#e4e4ea;color:var(--tx);font:500 15px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI Variable Text","Segoe UI",Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.app{height:100vh;height:100dvh;max-width:480px;margin:0 auto;display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--bg);overflow:hidden}
+@media(min-width:520px) and (min-height:760px){.app{height:min(calc(100dvh - 32px),860px);margin:16px auto;border-radius:34px;box-shadow:0 20px 60px #0003}}
+header{display:grid;grid-template-columns:84px 1fr 84px;align-items:center;padding:max(10px,env(safe-area-inset-top)) 10px 4px;text-align:center}
+header h1{margin:0;font-size:17px;font-weight:700;letter-spacing:-.01em}header p{margin:0;font-size:12px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header button{white-space:nowrap;border:0;background:none;color:var(--bl);font:inherit;font-size:16px;font-weight:600;padding:8px;cursor:pointer;border-radius:10px}header button:disabled{opacity:.3;cursor:default}header button:active{background:#007aff1a}
+#bk{text-align:left;font-size:20px}#go{text-align:right}
+main{min-height:0;padding:6px 14px}
+.v{display:none;height:100%;min-height:0;overflow-y:auto;overscroll-behavior:contain;flex-direction:column;gap:10px;animation:in .3s cubic-bezier(.2,.8,.2,1)}.v.on{display:flex}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.cd{background:var(--cd);border-radius:20px;box-shadow:var(--sh);padding:12px 14px;min-height:0}
+.row{display:flex;align-items:center;gap:8px}
+h2{margin:0;font-size:13px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}
+.hero{display:flex;align-items:center;gap:10px;flex:none}.hero svg{width:70px;height:70px;flex:none}
+.bub{position:relative;flex:1;background:var(--cd);box-shadow:var(--sh);border-radius:18px;padding:10px 14px;font-weight:600;font-size:14px}
+.bub::before{content:"";position:absolute;left:-6px;top:50%;margin-top:-6px;width:12px;height:12px;background:var(--cd);transform:rotate(45deg);border-radius:2px}
+.dg{flex:1 0 240px;display:grid;padding:6px}.dg svg{width:100%;height:100%;min-height:0}
+svg text{font-family:inherit}.blk{cursor:pointer;outline:0}.blk .m{transition:filter .2s}.blk:hover .m{filter:brightness(1.07)}.blk.sel .m{stroke:#1d1d1f;stroke-width:3}
+.fl{stroke-dasharray:5 7;animation:fl 1s linear infinite}@keyframes fl{to{stroke-dashoffset:-12}}
+#info{flex:none;min-height:70px;display:flex;flex-direction:column;justify-content:center}#info b{font-size:15px}#info span{color:var(--mu);font-size:13.5px}
+.chips{display:flex;gap:8px;flex:none}.chip{flex:1;border:0;background:var(--cd);box-shadow:var(--sh);border-radius:14px;padding:11px 6px;font:inherit;font-weight:600;font-size:14px;color:var(--tx);cursor:pointer;transition:transform .12s,background .2s,color .2s}
+.chip:active{transform:scale(.96)}.chip.on{background:var(--bl);color:#fff}
+.sl{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:7px 0;border-top:1px solid var(--ln)}.sl:first-of-type{border-top:0}
+.sl b{font-weight:600}.sl output{color:var(--bl);font-weight:700;font-variant-numeric:tabular-nums}.sl small{grid-column:1/-1;color:var(--mu);font-size:12px;margin-top:-2px}.sl input{grid-column:1/-1}
+input[type=range]{width:100%;height:5px;margin:8px 0 2px;appearance:none;-webkit-appearance:none;background:#d1d1d6;border-radius:3px;outline:0;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 6px #0004,0 0 0 .5px #0002}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:0;box-shadow:0 1px 6px #0004}
+.note{font-size:12px;color:var(--mu);margin:0}
+.top{position:relative;display:flex;align-items:center;gap:12px;flex:none}.top>svg{width:104px;height:104px;flex:none}
+.big{font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 11px;font-size:12.5px;font-weight:600;background:var(--fl);white-space:nowrap}
+.pill i{width:9px;height:9px;border-radius:50%;background:var(--c,#8e8e93)}.pill em{font-style:normal;font-variant-numeric:tabular-nums}
+.col{display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-width:0}
+.live{flex:1 0 300px;display:flex;flex-direction:column;gap:8px}
+.seg{display:flex;background:var(--fl);border-radius:10px;padding:2px;flex:none}.seg button{flex:1;border:0;background:none;font:inherit;font-weight:600;font-size:12.5px;padding:6px 4px;border-radius:8px;color:var(--mu);cursor:pointer}.seg button.on{background:#fff;color:var(--tx);box-shadow:0 1px 3px #0002}
+.cvw{flex:1;min-height:0;position:relative}canvas{position:absolute;inset:0;width:100%;height:100%}
+.scr{display:flex;align-items:center;gap:10px;flex:none}.scr span{min-width:44px;text-align:right;color:var(--mu);font-size:13px;font-variant-numeric:tabular-nums}
+.ib{flex:none;width:36px;height:36px;border:0;border-radius:50%;background:var(--bl);display:grid;place-items:center;cursor:pointer}.ib:active{transform:scale(.9)}
+.vd{margin:0;font-size:15px;font-weight:600;flex:none}#rs>*{flex:none}
+table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}th,td{padding:8px 4px;text-align:right;border-top:1px solid var(--ln)}th{font-size:12px;border-top:0;color:var(--tx)}th:first-child,td:first-child{text-align:left;color:var(--mu)}td{font-weight:700}
+.br{animation:br 3.2s ease-in-out infinite;transform-box:view-box;transform-origin:60px 60px}@keyframes br{50%{transform:scale(1.06)}}
+nav{display:flex;background:#fffc;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--ln);padding:6px 6px max(6px,env(safe-area-inset-bottom))}
+nav button{flex:1;border:0;background:none;font:inherit;font-size:11px;font-weight:600;color:#8e8e93;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px;cursor:pointer;transition:color .2s}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}nav button.on{color:var(--bl)}
+@media(max-height:620px){.vd{font-size:13.5px}th,td{padding:5px 4px}#rs .note{font-size:11.5px}.hero svg{width:52px;height:52px}.top>svg{width:84px;height:84px}.big{font-size:32px}#info{min-height:58px}.sl{padding:4px 0}.cd{padding:9px 12px}}
+.seg button::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:5px}
+.v{scrollbar-width:none}.v::-webkit-scrollbar{display:none}
+.bob{animation:bob 2.6s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-2px)}}
+@media(prefers-reduced-motion:reduce){.bob,.br,.fl{animation:none}}
+#h0,#h2{cursor:pointer}
+.cs{position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:5px;border:0;background:var(--fl);color:var(--bl);font:inherit;font-weight:600;font-size:12.5px;padding:6px 11px;border-radius:999px;cursor:pointer}.cs:active{transform:scale(.95)}
+dialog{border:0;padding:16px 16px max(16px,env(safe-area-inset-bottom));position:fixed;inset:auto 0 0 0;margin:0 auto;width:min(480px,100%);max-height:92dvh;overflow:auto;background:var(--cd);color:var(--tx);border-radius:26px 26px 0 0;box-shadow:0 -10px 40px #0003;font:inherit}
+dialog::backdrop{background:#0005;backdrop-filter:blur(3px)}dialog[open]{animation:up .3s cubic-bezier(.2,.8,.2,1)}@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sh{display:flex;justify-content:space-between;align-items:center}.sh b{font-size:17px}.sh button{border:0;background:none;color:var(--bl);font:inherit;font-weight:600;font-size:16px;cursor:pointer}
+.pv{width:110px;height:110px;display:block;margin:2px auto 6px}
+.og{display:flex;gap:6px;margin:6px 0 12px;flex-wrap:wrap}.og button{flex:1;min-width:62px;border:0;border-radius:12px;background:var(--fl);padding:9px 8px;font:inherit;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--tx)}.og button.on{background:var(--bl);color:#fff}
+.og button[style]::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--sw);margin-right:6px;vertical-align:-1px}
+@media(orientation:landscape) and (max-height:520px){header{padding-top:4px;padding-bottom:0}header p{display:none}nav{padding:2px 6px}nav button{flex-direction:row;justify-content:center;gap:6px;padding:7px}nav svg{width:18px;height:18px}.v:has(>.top){flex-direction:row}.v:has(>.top)>.top{flex:0 0 40%;flex-direction:column;justify-content:center;text-align:center}.v:has(>.top)>.top .col{align-items:center}.v:has(>.top)>.live{flex:1 1 0;min-height:0}.cs{position:static;margin-top:2px}.v:has(>.top)>.top{gap:4px;padding:8px}.v:has(>.top)>.top>svg{width:78px;height:78px}.v:has(>.top) .big{font-size:30px}.v:has(>.top) #sx{display:none}}
+</style></head><body>
+<div class="app">
+<header><button id="bk" aria-label="Back">‹</button><div><h1>Stress Monitor Lab</h1><p id="sn"></p></div><button id="go">Next</button></header>
+<main>
+<section class="v on">
+<div class="hero"><svg viewBox="0 0 120 120" id="h0"></svg><div class="bub" id="bb">Hi! I'm Pulse. This is the loop from Talaat &amp; El-Balka (2023). Tap a block!</div></div>
+<div class="cd dg"><svg viewBox="0 0 300 372" id="dg">
+<defs><marker id="ah" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M1,1L9,5.5L1,10z" fill="#aeaeb2"/></marker></defs>
+<g fill="none" stroke="#aeaeb2" stroke-width="3" stroke-linecap="round" marker-end="url(#ah)">
+<path class="fl" d="M110 52V64"/><path class="fl" d="M110 100V112"/><path class="fl" d="M110 154V168"/><path class="fl" d="M110 210V224"/><path class="fl" d="M110 266V288"/>
+<path class="fl" d="M186 245H204"/><path class="fl" d="M250 224V82H128"/></g>
+<g class="blk" tabindex="0" data-t="Reference input: baseline homeostasis" data-d="The calm target: normal skin humidity, body temperature and activity for this person."><rect class="m" x="35" y="10" width="150" height="42" rx="14" fill="#ffcc00"/><text x="110" y="36" text-anchor="middle" font-weight="700" fill="#fff" font-size="14">Baseline</text></g>
+<g class="blk" tabindex="0" data-t="Error (Σ)" data-d="Compares the baseline with what the wearable measures. The difference is the error signal."><circle class="m" cx="110" cy="82" r="18" fill="#fff" stroke="#aeaeb2" stroke-width="3"/><text x="110" y="89" text-anchor="middle" font-weight="700" font-size="20" fill="#6e6e73">Σ</text></g>
+<g class="blk" tabindex="0" data-t="ML controller" data-d="Decision Tree or Optimized SVM. It reads the sensor features and decides: Low, Normal or High stress."><rect class="m" x="35" y="112" width="150" height="42" rx="14" fill="#34c759"/><text x="110" y="138" text-anchor="middle" font-weight="700" fill="#fff" font-size="14">ML controller</text></g>
+<g class="blk" tabindex="0" data-t="Actuator: alert + biofeedback" data-d="When High stress is detected the user gets an alert and a breathing guide, which pulls stress down."><rect class="m" x="35" y="168" width="150" height="42" rx="14" fill="#007aff"/><text x="110" y="194" text-anchor="middle" font-weight="700" fill="#fff" font-size="14">Alert / biofeedback</text></g>
+<g class="blk" tabindex="0" data-t="Plant: the human body" data-d="Stress rises with events (meetings, deadlines) and settles back slowly. It cannot change instantly."><rect class="m" x="35" y="224" width="150" height="42" rx="14" fill="#ff9500"/><text x="110" y="250" text-anchor="middle" font-weight="700" fill="#fff" font-size="14">Human body</text></g>
+<g class="blk" tabindex="0" data-t="Output: classified stress level" data-d="The stress category (Low / Normal / High) shown to the user and the doctor."><rect class="m" x="35" y="288" width="150" height="42" rx="14" fill="#8e8e93"/><text x="110" y="314" text-anchor="middle" font-weight="700" fill="#fff" font-size="14">Stress level</text></g>
+<g class="blk" tabindex="0" data-t="Wearable IoT sensors (feedback)" data-d="ECG, skin humidity, body temperature and step count are measured and sent back. Slow updates add lag."><rect class="m" x="206" y="224" width="88" height="42" rx="14" fill="#af52de"/><text x="250" y="243" text-anchor="middle" font-weight="700" fill="#fff" font-size="12.5">Wearable</text><text x="250" y="257" text-anchor="middle" font-weight="700" fill="#fff" font-size="12.5">sensors</text></g>
+</svg></div>
+<div class="cd" id="info"><b>Tap a block</b><span>Select any block to learn what it does.</span></div>
+</section>
+
+<section class="v">
+<div class="chips" id="pr"><button class="chip" data-k="0.8,3,1,8,.8">Calm day</button><button class="chip on" data-k="1.3,4,2,8,.8">Busy day</button><button class="chip" data-k="1.6,7,4,8,.8">Exam week</button></div>
+<div class="cd" style="flex:1 0 auto;display:flex;flex-direction:column;justify-content:space-around;gap:4px">
+<div class="sl"><b>Stress events</b><output></output><small>How strong meetings and deadlines are</small><input type="range" id="i" min=".3" max="1.6" step=".05" value="1.3"></div>
+<div class="sl"><b>Sensor noise</b><output></output><small>Motion and skin-contact noise</small><input type="range" id="n" min="0" max="15" step=".5" value="4"></div>
+<div class="sl"><b>Sensor update lag</b><output></output><small>Minutes between wearable readings</small><input type="range" id="l" min="1" max="10" step="1" value="2"></div>
+<div class="sl"><b>Deadband</b><output></output><small>Alert switches off this far below High</small><input type="range" id="d" min="0" max="20" step="1" value="8"></div>
+<div class="sl"><b>Biofeedback strength</b><output></output><small>How much the breathing guide helps</small><input type="range" id="s" min=".2" max="1.5" step=".05" value=".8"></div></div>
+<p class="note">Condition 1 (A) Decision Tree vs Condition 2 (B) Optimized SVM, as in the study. Paper ranges: 95–104 °F, 10–100 % humidity, 0–10000 steps. Simplified illustration.</p>
+</section>
+
+<section class="v">
+<div class="cd top"><svg viewBox="0 0 120 120" id="h2"></svg><div class="col"><div class="big" id="bg">0</div><span class="pill" id="cl">Low</span><span class="pill" id="ba"><i></i>Biofeedback off</span><span class="note" id="sx"></span></div><button class="cs" id="avb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 15-5 16 0"/></svg>Avatar</button></div>
+<div class="cd live"><div class="seg" id="gs"><button data-r="A" style="--c:#ff9500">A · Tree</button><button data-r="B" class="on" style="--c:#007aff">B · SVM</button><button data-r="O" style="--c:#8e8e93">No feedback</button></div>
+<div class="cvw"><canvas id="cv"></canvas></div>
+<div class="scr"><button class="ib" id="pp" aria-label="Play or pause"></button><input type="range" id="sl" min="0" max="1000" value="0" style="margin:0"><span id="tm">08:00</span></div></div>
+</section>
+
+<section class="v" id="rs">
+<p class="vd" id="vd"></p>
+<div class="cd"><table><thead><tr><th></th><th style="color:#ff9500">A · Tree</th><th style="color:#007aff">B · SVM</th><th style="color:#8e8e93">No FB</th></tr></thead><tbody id="tb"></tbody></table></div>
+<p class="note">Illustrative model, not the paper's results. Lower peak, minutes in High and tracking error are better.</p>
+<div class="cd" style="flex:none"><h2>Reference</h2><p class="note" style="color:var(--tx);margin:4px 0 6px">Talaat, F. M., &amp; El-Balka, R. M. (2023). Stress monitoring using wearable sensors: IoT techniques in medical field. <i>Neural Computing and Applications, 35</i>(25), 18571–18584.</p><a href="https://link.springer.com/article/10.1007/s00521-023-08681-z" target="_blank" rel="noopener" style="color:var(--bl);font-weight:600;font-size:13px;text-decoration:none">Open the article ↗</a></div>
+</section>
+</main>
+<nav id="nv">
+<button data-n="0"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2M20 4v5h-5M4 20v-5h5"/></svg>Loop</button>
+<button data-n="1"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>Setup</button>
+<button data-n="2"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>Live</button>
+<button data-n="3"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Results</button></nav>
+<dialog id="av"><div class="sh"><b>Customize Pulse</b><button id="avx">Done</button></div><svg viewBox="0 0 120 120" id="h3" class="pv"></svg>
+<h2>Companion</h2><div class="og" data-k="c"><button data-v="none">None</button><button data-v="chick">Chick</button><button data-v="kitty">Kitty</button><button data-v="sprout">Sprout</button></div>
+<h2>Accessory</h2><div class="og" data-k="g"><button data-v="0">None</button><button data-v="1">Glasses</button></div>
+<h2>Color</h2><div class="og" data-k="col"><button data-v="mood" style="--sw:linear-gradient(90deg,#30b0c7,#ff9f0a,#ff3b30)">Mood</button><button data-v="mint" style="--sw:hsl(150 55% 58%)">Mint</button><button data-v="sky" style="--sw:hsl(205 85% 65%)">Sky</button><button data-v="lav" style="--sw:hsl(265 65% 76%)">Lilac</button><button data-v="peach" style="--sw:hsl(22 95% 74%)">Peach</button></div></dialog>
+</div>
+<script>
+const G=id=>document.getElementById(id),$$=s=>[...document.querySelectorAll(s)];
+const CL={A:'#ff9500',B:'#007aff',O:'#8e8e93'},NM={A:'A · Decision Tree',B:'B · Optimized SVM',O:'No feedback'},N=480,TAU=20,HI=65,LO=35;
+const NAMES=['Loop','Setup','Live','Results'],TIP=['Tap a block to learn what it does.','Pick a day type or drag the sliders.','Press play and watch Pulse react.','Compare both controllers.'];
+const cls=v=>v>=HI?'High':v>=LO?'Normal':'Low',ccol=v=>v>=HI?'#ff3b30':v>=LO?'#34c759':'#007aff';
+const mas=p=>`<circle cx="60" cy="60" r="54" fill="none" stroke="#e5e5ea" stroke-width="9"/><circle id="${p}r" cx="60" cy="60" r="54" fill="none" stroke="#34c759" stroke-width="9" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100" transform="rotate(-90 60 60)"/>
+<g id="${p}g"><g transform="translate(60 68) scale(.82)"><path id="${p}t" d="M-7-32q-4-12-12-13M7-32q4-12 12-13" fill="none" stroke="#30b0c7" stroke-width="5" stroke-linecap="round"/><ellipse id="${p}b" rx="38" ry="34" fill="#30b0c7"/><ellipse cx="-14" cy="-5" rx="7" ry="8" fill="#fff"/><ellipse cx="14" cy="-5" rx="7" ry="8" fill="#fff"/><circle cx="-13" cy="-4" r="3.6" fill="#1d1d1f"/><circle cx="15" cy="-4" r="3.6" fill="#1d1d1f"/><circle cx="-25" cy="10" r="5" fill="#ff8fa3" opacity=".55"/><circle cx="25" cy="10" r="5" fill="#ff8fa3" opacity=".55"/><path id="${p}m" d="M-11 14Q0 24 11 14" fill="none" stroke="#1d1d1f" stroke-width="3" stroke-linecap="round"/><path id="${p}w1" d="M-22-18L-8-18" stroke="#1d1d1f" stroke-width="3" stroke-linecap="round"/><path id="${p}w2" d="M22-18L8-18" stroke="#1d1d1f" stroke-width="3" stroke-linecap="round"/><path id="${p}s" d="M34-20q-6 10 0 14q6-4 0-14z" fill="#5ac8fa" opacity="0"/><g id="${p}x"></g><g class="bob"><g id="${p}k" transform="translate(0 -30)"></g></g></g></g>`;
+function setM(p,s,bio){LAST[p]=[s,bio];const h=Math.round(175-170*Math.min(s,100)/100),c=COLS[AV.col]||`hsl(${h} 70% 55%)`,k=10-s*.2,t=Math.max(0,Math.min(1,(s-45)/55))*7;
+ G(p+'b').setAttribute('fill',c);G(p+'t').setAttribute('stroke',c);G(p+'t').style.display=AV.c==='none'?'':'none';G(p+'m').setAttribute('d',`M-11 14Q0 ${14+k} 11 14`);
+ G(p+'w1').setAttribute('d',`M-22-18L-8 ${-18-t}`);G(p+'w2').setAttribute('d',`M22-18L8 ${-18-t}`);G(p+'s').setAttribute('opacity',s>=HI?1:0);
+ G(p+'r').setAttribute('stroke',ccol(s));G(p+'r').setAttribute('stroke-dasharray',Math.min(s,100)+' 100');G(p+'g').setAttribute('class',bio?'br':'')}
+const LAST={},COLS={mint:'hsl(150 55% 58%)',sky:'hsl(205 85% 65%)',lav:'hsl(265 65% 76%)',peach:'hsl(22 95% 74%)'},AV={c:'chick',g:0,col:'mood'},GL='<circle cx="-14" cy="-5" r="10" fill="#ffffff22" stroke="#1d1d1f" stroke-width="2.6"/><circle cx="14" cy="-5" r="10" fill="#ffffff22" stroke="#1d1d1f" stroke-width="2.6"/><path d="M-4-5h8" stroke="#1d1d1f" stroke-width="2.6"/>',
+COMP={none:'',chick:'<ellipse cy="-9" rx="11" ry="10" fill="#ffd60a"/><circle cx="-4" cy="-11" r="1.7" fill="#1d1d1f"/><circle cx="4" cy="-11" r="1.7" fill="#1d1d1f"/><path d="M-2.6-7.5h5.2L0-4.2z" fill="#ff9500"/><path d="M-2-19q0-4 2-4M1-19q1-3 3-3" stroke="#ffd60a" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="-8" cy="-7" r="2" fill="#ff8fa3" opacity=".6"/><circle cx="8" cy="-7" r="2" fill="#ff8fa3" opacity=".6"/>',
+kitty:'<path d="M-11-7L-9-20L-2-14ZM11-7L9-20L2-14Z" fill="#ffa94d"/><ellipse cy="-8" rx="12" ry="9" fill="#ffa94d"/><circle cx="-4" cy="-9" r="1.6" fill="#1d1d1f"/><circle cx="4" cy="-9" r="1.6" fill="#1d1d1f"/><path d="M-1.5-6h3l-1.5 2z" fill="#ff6b81"/>',
+sprout:'<path d="M0 0V-12" stroke="#34a853" stroke-width="3" stroke-linecap="round"/><path d="M0-11C-2-20-12-20-14-14c6 1 11 2 14 3z" fill="#34c759"/><path d="M0-11C2-22 12-22 14-16c-6 1-11 3-14 5z" fill="#30d158"/>'};
+try{Object.assign(AV,JSON.parse(localStorage.getItem('pulse-av')||'{}'))}catch(e){}
+function applyAv(){['a','c','e'].forEach(p=>{G(p+'k').innerHTML=COMP[AV.c]||'';G(p+'x').innerHTML=AV.g?GL:'';const l=LAST[p]||[12,0];setM(p,l[0],l[1])});try{localStorage.setItem('pulse-av',JSON.stringify(AV))}catch(e){}$$('#av .og').forEach(g=>g.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(AV[g.dataset.k])===b.dataset.v)))}
+G('h0').innerHTML=mas('a');G('h2').innerHTML=mas('c');G('h3').innerHTML=mas('e');applyAv();
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=rng(11),gz=()=>Math.sqrt(-2*Math.log(R()+1e-9))*Math.cos(6.2832*R()),Z1=Array.from({length:N},gz),Z2=Array.from({length:N},gz);
+const EV=[[70,50,1],[210,60,1.25],[340,45,.9]];
+function sim(k,P){let s=25,est=25,al=false,prev=false,S=[],E=[],A=[],ok=0,ae=0,nal=0;
+ for(let t=0;t<N;t++){let u=0;for(const[c,d,a]of EV)u+=a*Math.exp(-(((t-c)/(d/2.5))**2));u*=45*P.i;
+  if(k!=='O'){if(t%P.l===0){est=s+P.n*Z1[t]+(k==='A'?8:1.5)*Z2[t];if(k==='A')est=Math.round(est/12)*12;est=Math.max(0,Math.min(100,est))}
+   if(est>=HI)al=true;else if(est<HI-P.d)al=false;if(al&&!prev)nal++;prev=al;if(cls(est)===cls(s))ok++;ae+=Math.abs(est-s)}
+  S.push(s);E.push(est);A.push(al?1:0);s+=(25-s+u-(al?1:0)*P.s*40)/TAU;s=Math.max(0,Math.min(100,s))}
+ return{k,S,E,A,acc:ok/N*100,pk:Math.max(...S),hi:S.filter(v=>v>=HI).length,mae:ae/N,nal}}
+const V=id=>+G(id).value;let D=null,gr='B',cur=0,raf=0,ps={p:0,play:false,last:0},W=0,H=0,dpr=1;
+const gc=document.createElement('canvas'),cv=G('cv'),cx=cv.getContext('2d'),LM=30,TM=8,RMg=8,BM=22,FN='600 11px -apple-system,"Segoe UI",system-ui,sans-serif';
+function compute(){const P={i:V('i'),n:V('n'),l:V('l'),d:V('d'),s:V('s')};
+ $$('.sl output').forEach(o=>{const v=+o.parentNode.querySelector('input').value;o.textContent=o.parentNode.querySelector('input').id==='l'?v+' min':v});
+ const r=['A','B','O'].map(k=>sim(k,P));D={r,P};const[a,b,o]=r;
+ G('tb').innerHTML=[['Accuracy',x=>x.k==='O'?'—':x.acc.toFixed(1)+'%'],['Peak stress',x=>x.pk.toFixed(0)],['Minutes in High',x=>x.hi],['Tracking error',x=>x.k==='O'?'—':x.mae.toFixed(1)],['Alerts sent',x=>x.k==='O'?'—':x.nal]].map(([n,f])=>`<tr><td>${n}</td>${r.map(x=>`<td>${f(x)}</td>`).join('')}</tr>`).join('');
+ G('vd').textContent=a.hi+b.hi===0?`Both controllers kept stress out of the High zone; without feedback it stays High for ${o.hi} min. Optimized SVM classifies ${b.acc.toFixed(0)}% of minutes correctly vs ${a.acc.toFixed(0)}% for the Decision Tree.`:`Optimized SVM classifies ${b.acc.toFixed(0)}% of minutes correctly vs ${a.acc.toFixed(0)}% for the Decision Tree, and keeps stress in the High zone for ${b.hi} min vs ${a.hi} min (${o.hi} min with no feedback).`}
+const X=t=>LM+t/N*(W-LM-RMg),Y=v=>TM+(H-TM-BM)*(1-v/100);
+function layout(){const r=cv.getBoundingClientRect();if(!r.width||!r.height||!D)return;dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=gc.width=W*dpr;cv.height=gc.height=H*dpr;
+ const g=gc.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.font=FN;g.fillStyle='#34c75922';g.fillRect(LM,Y(LO),W-LM-RMg,Y(0)-Y(LO));g.fillStyle='#ff3b3022';g.fillRect(LM,Y(100),W-LM-RMg,Y(HI)-Y(100));
+ g.strokeStyle='#ececf0';g.fillStyle='#8e8e93';g.textAlign='right';for(const v of[0,35,65,100]){g.beginPath();g.moveTo(LM,Y(v)+.5);g.lineTo(W-RMg,Y(v)+.5);g.stroke();g.fillText(v,LM-5,Y(v)+4)}
+ g.textAlign='center';for(let h=0;h<=8;h+=2)g.fillText((8+h)+':00',X(h*60),H-6);g.textAlign='left';g.fillStyle='#ff3b30';g.fillText('High',LM+4,Y(100)+12);draw()}
+const clk=m=>{m=Math.round(m);return String(8+(m/60|0)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+function draw(){if(!D||!W||!H)return;cx.setTransform(dpr,0,0,dpr,0,0);cx.clearRect(0,0,W,H);cx.drawImage(gc,0,0,W,H);
+ const p=ps.p,i=Math.min(N-1,p|0),f=p-i;cx.lineJoin=cx.lineCap='round';let sv=0,bio=0;
+ for(const r of D.r){cx.strokeStyle=CL[r.k];cx.lineWidth=r.k==='O'?1.8:2.6;cx.setLineDash(r.k==='O'?[1,5]:[]);cx.beginPath();for(let j=0;j<=i;j++)cx[j?'lineTo':'moveTo'](X(j),Y(r.S[j]));
+  let y=r.S[i];if(i<N-1){y+=(r.S[i+1]-y)*f;cx.lineTo(X(p),Y(y))}cx.stroke();cx.setLineDash([]);cx.fillStyle='#fff';cx.beginPath();cx.arc(X(p),Y(y),4.5,0,7);cx.fill();cx.strokeStyle=CL[r.k];cx.lineWidth=2.5;cx.stroke();
+  if(r.k===gr){sv=y;bio=r.A[i]}}
+ setM('c',sv,bio);setM('a',sv,bio);G('bg').textContent=Math.round(sv);const c=G('cl');c.textContent=cls(sv)+' stress';c.style.cssText=`background:${ccol(sv)}22;color:${ccol(sv)}`;
+ G('ba').innerHTML=`<i style="--c:${bio?'#34c759':'#8e8e93'}"></i>Biofeedback ${bio?'on':'off'}`;G('sx').textContent=`${(97+.06*sv).toFixed(1)} °F · ${Math.round(10+.9*sv)}% humidity · ${Math.round(1500+45*sv).toLocaleString()} steps (simulated)`;G('sl').value=p/N*1000;G('tm').textContent=clk(p)}
+const IC={play:'<svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z" fill="#fff"/></svg>',pause:'<svg width="14" height="14" viewBox="0 0 14 14"><rect x="2.5" y="1.5" width="3.2" height="11" rx="1" fill="#fff"/><rect x="8.3" y="1.5" width="3.2" height="11" rx="1" fill="#fff"/></svg>',redo:'<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M13 8a5 5 0 1 1-1.8-3.8M13 2v3h-3"/></svg>'};
+const btn=()=>G('pp').innerHTML=ps.play?IC.pause:ps.p>=N-1?IC.redo:IC.play,RMo=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function tick(ts){if(ps.play){ps.p=Math.min(N-1,ps.p+Math.min(ts-ps.last,100)/1000*60);ps.last=ts;if(ps.p>=N-1){ps.play=false;btn()}}draw();raf=ps.play?requestAnimationFrame(tick):0}
+function play(){if(RMo){ps.p=N-1;ps.play=false;btn();draw();return}if(ps.p>=N-1)ps.p=0;ps.play=true;ps.last=performance.now();btn();if(!raf)raf=requestAnimationFrame(tick)}
+function render(){const n=cur;$$('.v').forEach((e,i)=>e.classList.toggle('on',i===n));$$('#nv button').forEach((b,i)=>b.classList.toggle('on',i===n));
+ G('sn').textContent=`Diana Graceshel I. Paltad · ${n+1}/4 ${NAMES[n]}`;G('bk').disabled=!n;G('go').textContent=n===3?'Replay':'Next ›';G('go').setAttribute('aria-label',TIP[n]);ps.play=false;
+ if(n===2)requestAnimationFrame(()=>{layout();ps.p=0;play()});else btn()}
+function go(n){n=Math.max(0,Math.min(3,n));if(location.hash==='#'+(n+1)){cur=n;render()}else location.hash=n+1}
+addEventListener('hashchange',()=>{cur=Math.max(0,Math.min(3,(parseInt(location.hash.slice(1))||1)-1));render()});
+G('go').onclick=()=>go(cur===3?2:cur+1);G('bk').onclick=()=>go(cur-1);$$('#nv button').forEach(b=>b.onclick=()=>go(+b.dataset.n));
+addEventListener('keydown',e=>{if(e.target.matches('input'))return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1)});
+$$('.blk').forEach(b=>{const pick=()=>{$$('.blk').forEach(x=>x.classList.toggle('sel',x===b));G('info').innerHTML=`<b>${b.dataset.t}</b><span>${b.dataset.d}</span>`;G('bb').textContent=b.dataset.t+'!'};b.onclick=pick;b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick()}}});
+let tm;const again=()=>{clearTimeout(tm);tm=setTimeout(()=>{compute();ps.p=0;layout();if(cur===2)play()},100)};
+['i','n','l','d','s'].forEach(i=>G(i).oninput=()=>{$$('.chip').forEach(c=>c.classList.remove('on'));again()});
+G('pr').onclick=e=>{const c=e.target.closest('.chip');if(!c)return;$$('.chip').forEach(x=>x.classList.toggle('on',x===c));c.dataset.k.split(',').forEach((v,j)=>G(['i','n','l','d','s'][j]).value=v);again()};
+G('gs').onclick=e=>{const b=e.target.closest('button');if(!b)return;gr=b.dataset.r;[...G('gs').children].forEach(x=>x.classList.toggle('on',x===b));draw()};
+G('pp').onclick=()=>{if(ps.play){ps.play=false;btn()}else play()};G('sl').oninput=e=>{ps.play=false;ps.p=e.target.value/1000*(N-1);btn();draw()};
+const dlg=G('av'),openAv=()=>dlg.showModal();
+G('avb').onclick=G('h0').onclick=G('h2').onclick=openAv;G('avx').onclick=()=>dlg.close();
+dlg.addEventListener('click',e=>{const r=dlg.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dlg.close()});
+$$('#av .og').forEach(g=>g.onclick=e=>{const b=e.target.closest('button');if(!b)return;AV[g.dataset.k]=g.dataset.k==='g'?+b.dataset.v:b.dataset.v;applyAv()});
+new ResizeObserver(layout).observe(cv);compute();cur=Math.max(0,Math.min(3,(parseInt(location.hash.slice(1))||1)-1));render();
+</script></body></html>
